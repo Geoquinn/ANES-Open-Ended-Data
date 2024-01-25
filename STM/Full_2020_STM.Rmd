@@ -1,0 +1,110 @@
+---
+title: "STM_2020"
+output: 
+  html_document: 
+    toc: yes
+    number_sections: yes
+date: '2023-12-06'
+---
+
+# STM 2020 Model (All-Responses)
+
+```{r}
+library(readxl)
+library(dplyr)
+
+#Generate Dem Likes Sample of 200
+anes_data_full <- read_excel("anes_2020_4.xlsx", sheet = 1)
+
+# Remove rows with NA values
+anes_data_full <- na.omit(anes_data_full)
+
+Full_800 <- anes_data_full
+```
+
+```{r}
+# Load necessary libraries
+library(dplyr)
+library(tm)
+library(stm)
+library(tidytext)
+library(tidyr)
+library(quanteda)
+
+# Assuming the data frame is named Full_800 and is already loaded into R
+# and it has the columns Dem_Likes, Dem_Dislikes, Rep_Likes, Rep_Dislikes
+
+# Combine the text columns into a single text vector
+# Uniting all text responses into one column for each row
+Full_800_combined <- Full_800 
+
+# corpus object with the text data
+corp_quanteda <- corpus(Full_800_combined$Text)
+
+# Tokenization and preprocessing
+preprocessed_text_data <- tokens(corp_quanteda, 
+                                 remove_numbers = TRUE, 
+                                 remove_punct = TRUE,
+                                 remove_symbols = TRUE) %>%
+  tokens_remove(stopwords("en")) %>%
+  tokens_wordstem(language = "english") %>%
+  tokens_tolower() %>%
+  tokens_ngrams(1)
+
+# Create the document-feature matrix (DFM)
+topic_dfm <- dfm(preprocessed_text_data) 
+
+# Convert the DFM to the stm format
+topic_dfm_stm <- quanteda::convert(topic_dfm, to = "stm")
+
+# Extract the covariates
+meta_data <- data.frame(
+  PartyId = as.factor(Full_800$V201228), # Factor
+  Education = as.factor(Full_800$V201510), # Factor
+  Ideology = as.numeric(Full_800$V201201), # Numeric
+  GovTrust = as.numeric(Full_800$V201233), # Numeric
+  Age = as.numeric(Full_800$V201507x) # Numeric
+)
+
+# Fit the STM model with covariates
+fit_stm <- stm(documents = topic_dfm_stm$documents, vocab = topic_dfm_stm$vocab, K = 35,
+               prevalence =~ PartyId + Education + Ideology + GovTrust + Age,
+               max.em.its = 1000000, data = meta_data, init.type = "Spectral", verbose = TRUE)
+```
+
+## STM Full Data 
+
+```{r}
+library(stm)
+# Topic Labels
+topics_labels_Full_800 <- labelTopics(fit_stm)
+print(topics_labels_Full_800)
+```
+
+## Find Thoughts
+```{r}
+#Dem_Likes
+top_thoughts_800 <- findThoughts(fit_stm, texts = Full_800_combined$Text, n = 10)$docs
+print(top_thoughts_800)
+```
+
+## Estimate Effects of Covariates 
+```{r}
+# Estimated effects of Covariates (Dem_Likes)
+estEffoff <- estimateEffect(1:35 ~ PartyId + Education + Ideology + GovTrust + Age, 
+                            stmobj = fit_stm, 
+                            meta = meta_data, 
+                            uncertainty = "Global")
+
+# View the summary of the estimated effects
+summary_estEffoff <- summary(estEffoff)
+```
+
+## Word Clouds for 35 Topics 
+```{r}
+#Wordcloud
+for(topic in 1:35) {
+  cloud(fit_stm, topic = topic)
+  title(paste("Word Cloud for 35 Topics", topic))
+}
+```
