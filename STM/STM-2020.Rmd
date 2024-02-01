@@ -1,90 +1,130 @@
 ---
-title: "STM_Outputs"
-author: "George D. Quinn"
-date: "`r Sys.Date()`"
-output: html_document
+title: "STM_2020"
+output:
+  html_notebook: 
+    toc: yes
+  html_document:
+    df_print: paged
+  pdf_document: default
+editor_options:
+  markdown:
+    wrap: 72
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+## Code for Random Selection of 200 cases per question
+
+```{r eval=FALSE, include=FALSE}
+library(readxl)
+anes_2020_4_1_ <- read_excel("anes_2020_4 (1).xlsx")
+View(anes_2020_4_1_)
+install.packages("openxlsx")
+
+library(dplyr)
+# Create 200 Dem Likes Responses
+
+Dem_Likes <- read_excel('anes_2020_4 (1).xlsx', sheet = 'Dem_Likes')
+
+Dem_Likes <- Dem_Likes %>%
+  mutate(Dem_Likes = na_if(Dem_Likes, "-1")) %>%  # Replace "-1" with NA
+  mutate(Dem_Likes = na_if(Dem_Likes, "-9"))      # Replace "-9" with NA
+
+Dem_Likes <- na.omit(Dem_Likes)
+
+Dem_Likes_200 <- sample_n(Dem_Likes, 200)
+library(openxlsx)
+write.xlsx(Dem_Likes_200, "Dem_Likes_200.xlsx", rowNames = FALSE)
+
+
+# Create 200 Dem Dislike Responses
+
+Dem_Dislikes <- read_excel('anes_2020_4 (1).xlsx', sheet = 'Dem_Dislikes')
+
+Dem_Dislikes <- Dem_Dislikes %>%
+  mutate(Dem_Dislikes = na_if(Dem_Dislikes, "-1")) %>%  # Replace "-1" with NA
+  mutate(Dem_Dislikes = na_if(Dem_Dislikes, "-9"))      # Replace "-9" with NA
+
+
+Dem_Dislikes <- na.omit(Dem_Dislikes)
+
+Dem_Dislikes_200 <- sample_n(Dem_Dislikes, 200)
+library(openxlsx)
+write.xlsx(Dem_Dislikes_200, "Dem_Dislikes_200.xlsx", rowNames = FALSE)
+
+
+# Create 200 Rep_Likes Responses
+
+Rep_Likes <- read_excel('anes_2020_4 (1).xlsx', sheet = 'Rep_Likes')
+
+Rep_Likes <- Rep_Likes %>%
+  mutate(Rep_Likes = na_if(Rep_Likes, "-1")) %>%  # Replace "-1" with NA
+  mutate(Rep_Likes = na_if(Rep_Likes, "-9"))      # Replace "-9" with NA
+
+
+Rep_Likes <- na.omit(Rep_Likes)
+
+Rep_Likes_200 <- sample_n(Rep_Likes, 200)
+
+library(openxlsx)
+write.xlsx(Rep_Likes_200, "Rep_Likes_200.xlsx", rowNames = FALSE)
+
+
+
+# Create 200 Rep_Likes Responses
+
+Rep_Dislikes <- read_excel('anes_2020_4 (1).xlsx', sheet = 'Rep_Dislikes')
+
+Rep_Dislikes <- Rep_Dislikes %>%
+  mutate(Rep_Dislikes = na_if(Rep_Dislikes, "-1")) %>%  # Replace "-1" with NA
+  mutate(Rep_Dislikes = na_if(Rep_Dislikes, "-9"))      # Replace "-9" with NA
+
+
+Rep_Dislikes <- na.omit(Rep_Dislikes)
+
+Rep_Dislikes_200 <- sample_n(Rep_Dislikes, 200)
+
+library(openxlsx)
+write.xlsx(Rep_Dislikes_200, "Rep_Dislikes_200.xlsx", rowNames = FALSE)
 ```
 
-## 200 Randomly Generated Responses
+Prior selection was completed and compiled into a data frame
+"all_four_responses"
 
-## for all 4 Questions
+## Building the stm from random sampled responses (Mini_set)
 
 ```{r}
 library(readxl)
-library(dplyr)
-
 #Generate Dem Likes Sample of 200
-anes_data_dem_likes <- read_excel("anes_2020_4.xlsx", sheet = 1)
+anes_data_full <- read_excel("all_four_responses-2.xlsx", sheet = 1)
 
-# Filter out '-1' and '-9' responses
-valid_responses_DL <- filter(anes_data_dem_likes, V201107 != "-1", V201107 != "-9")
 
-# Sample 200 responses (or fewer if there are not enough valid responses)
-Dem_Like_200 <- sample_n(valid_responses_DL, size = min(200, nrow(valid_responses_DL)), replace = FALSE)
+# Sample 200 responses 
+Full_800 <- anes_data_full
 
-# View the sampled data
-print(Dem_Like_200)
 
-#Generate Dem Dislikes Sample of 200
-
-anes_data_dem_dislikes <- read_excel("anes_2020_4.xlsx", sheet = 2)
-
-# Filter out '-1' and '-9' responses
-valid_responses_DDL <- filter(anes_data_dem_dislikes, V201109 != "-1", V201109 != "-9")
-
-# Sample 200 responses (or fewer if there are not enough valid responses)
-Dem_Dislike_200 <- sample_n(valid_responses_DDL, size = min(200, nrow(valid_responses_DDL)), replace = FALSE)
-
-# View the sampled data
-print(Dem_Dislike_200)
-
-#Generate Rep Likes Sample of 200
-anes_data_rep_likes <- read_excel("anes_2020_4.xlsx", sheet = 3)
-
-# Filter out '-1' and '-9' responses
-valid_responses_RL <- filter(anes_data_rep_likes, V201111 != "-1", V201111 != "-9")
-
-# Sample 200 responses (or fewer if there are not enough valid responses)
-Rep_Like_200 <- sample_n(valid_responses_RL, size = min(200, nrow(valid_responses_RL)), replace = FALSE)
-
-# View the sampled data
-print(Rep_Like_200)
-
-#Generate Rep Dislikes Sample of 200
-
-anes_data_rep_dislikes <- read_excel("anes_2020_4.xlsx", sheet = 4)
-
-# Filter out '-1' and '-9' responses
-valid_responses_RDL <- filter(anes_data_rep_dislikes, V201113 != "-1", V201113 != "-9")
-
-# Sample 200 responses (or fewer if there are not enough valid responses)
-Rep_Dislike_200 <- sample_n(valid_responses_RDL, size = min(200, nrow(valid_responses_RDL)), replace = FALSE)
-
-# View the sampled data
-print(Rep_Dislike_200)
-```
-
-## Building STM Model with Covariates (Dem Likes)
-
-```{r}
+# Load necessary libraries
+library(dplyr)
+library(tm)
 library(stm)
+library(tidytext)
 library(quanteda)
-library(wordcloud)
-library(ggplot2)
+library(tidyr)
+
+# Assuming the data frame is named Full_800 and is already loaded into R
+# and it has the columns Dem_Likes, Dem_Dislikes, Rep_Likes, Rep_Dislikes
+
+# Combine the text columns into a single text vector
+# Uniting all text responses into one column for each row
+Full_800_combined <- Full_800 
 
 # corpus object with the text data
-corp_quanteda <- corpus(Dem_Like_200$V201107)
+corp_quanteda <- corpus(Full_800_combined$Responses)
 
 # Tokenization and preprocessing
-preprocessed_text_data <- tokens(corpus(Dem_Like_200$V201107), 
-              remove_numbers = TRUE, 
-              remove_punct = TRUE,
-              remove_symbols = TRUE) %>%
-  tokens_remove(stopwords(source = "snowball")) %>%
+preprocessed_text_data <- tokens(corp_quanteda, 
+                                 remove_numbers = TRUE, 
+                                 remove_punct = TRUE,
+                                 remove_symbols = TRUE) %>%
+  tokens_remove(stopwords("en")) %>%
   tokens_wordstem(language = "english") %>%
   tokens_tolower() %>%
   tokens_ngrams(1)
@@ -97,45 +137,348 @@ topic_dfm_stm <- quanteda::convert(topic_dfm, to = "stm")
 
 # Extract the covariates
 meta_data <- data.frame(
-  PartyId = as.factor(Dem_Like_200$V201228), # Factor
-  Education = as.factor(Dem_Like_200$V201510), # Factor
-  Ideology = as.numeric(Dem_Like_200$V201201), # Numeric
-  GovTrust = as.numeric(Dem_Like_200$V201233), # Numeric
-  Age = as.numeric(Dem_Like_200$V201507x) # Numeric
+  PartyId = as.factor(Full_800$V201228), # Factor
+  Education = as.factor(Full_800$V201510), # Factor
+  Ideology = as.numeric(Full_800$V201201), # Numeric
+  GovTrust = as.numeric(Full_800$V201233), # Numeric
+  Age = as.numeric(Full_800$V201507x) # Numeric
+)
+```
+
+## Finding K (Mini_set)
+
+```{r eval=FALSE, include=FALSE}
+# Run searchK to find the optimal number of topics
+result <- searchK(documents = topic_dfm_stm$documents, vocab = topic_dfm_stm$vocab, K = 25:45)
+
+
+# You can plot the results to assess the model fit across different numbers of topics
+plot(result, type = "line", ylim = c(0, max(result$heldout)))
+
+# Plot the results
+plot(result, metric = "heldout")
+plot(result, metric = "semanticcoherence")
+plot(result, metric = "residual")
+
+# narrowed results
+result_narrowed <- searchK(documents = topic_dfm_stm$documents, vocab = topic_dfm_stm$vocab, K = 30:38)
+
+
+# You can plot the results to assess the model fit across different numbers of topics
+plot(result_narrowed, type = "line", ylim = c(0, max(result$heldout)))
+
+# Plot the results
+plot(result_narrowed, metric = "heldout")
+plot(result_narrowed, metric = "semanticcoherence")
+plot(result_narrowed, metric = "residual")
+
+```
+
+## Mini_Set at 32
+
+```{r}
+library(tidytext)
+library(tidyr)
+library(quanteda)
+library(stm)
+
+#Generate Dem Likes Sample of 200
+anes_data_full <- read_excel("all_four_responses-2.xlsx", sheet = 1)
+
+# Sample 200 responses 
+Full_800 <- anes_data_full
+
+
+# corpus object with the text data
+corp_quanteda <- corpus(Full_800$Responses)
+
+# Tokenization and preprocessing
+preprocessed_text_data <- tokens(corp_quanteda, 
+                                 remove_numbers = TRUE, 
+                                 remove_punct = TRUE,
+                                 remove_symbols = TRUE) %>%
+  tokens_remove(stopwords("en")) %>%
+  tokens_wordstem(language = "english") %>%
+  tokens_tolower() %>%
+  tokens_ngrams(1)
+
+# Create the document-feature matrix (DFM)
+topic_dfm <- dfm(preprocessed_text_data) 
+
+
+# Extract the covariates
+meta_data <- data.frame(
+  PartyId = as.factor(Full_800$V201228), # Factor
+  Education = as.factor(Full_800$V201510), # Factor
+  Ideology = as.numeric(Full_800$V201201), # Numeric
+  GovTrust = as.numeric(Full_800$V201233), # Numeric
+  Age = as.numeric(Full_800$V201507x) # Numeric
 )
 
+# Check the number of documents
+n_documents <- length(topic_dfm_stm$documents)
+# Check the number of rows in metadata
+n_metadata <- nrow(meta_data)
+
+# Print out the counts to see the mismatch
+cat("Number of documents:", n_documents, "\n")
+cat("Number of metadata entries:", n_metadata, "\n")
+
+# Meta-data correction
+meta_data <- head(meta_data, -1)
+
 # Fit the STM model with covariates
-fit_stm <- stm(documents = topic_dfm_stm$documents, vocab = topic_dfm_stm$vocab, K = 35,
-               prevalence =~ PartyId + Education + Ideology + GovTrust + Age,
-               max.em.its = 1000, data = meta_data, init.type = "Spectral", verbose = TRUE)
+fit_stm_mini_set_32 <- stm(documents = topic_dfm_stm$documents, vocab = topic_dfm_stm$vocab, K = 32,prevalence =~ PartyId + Education + Ideology + GovTrust,
+max.em.its = 1000000, data = meta_data, init.type = "Spectral", verbose = TRUE)
 
-print(topics_labels)
+# Label topics
+labelTopics(fit_stm_mini_set_32)
+
+# Create Object 
+STM_32_MINI_SET <- labelTopics(fit_stm_mini_set_32)
+
+# Save Object
+save(STM_32_MINI_SET, file = "STM_32_MINI_SET.RData")
 ```
 
-## Data Visualization of Output (Dem Likes
-
-## Find Thoughts (Dem Likes)
+## Topic Probability for MINI SET via Theta - Presence across all documents
 
 ```{r}
-print(top_thoughts)
+# Extracting topic proportions
+topic_proportions <- fit_stm_mini_set_32$theta
+
+# Each document contributes to the topic it is most associated with
+dominant_topic_per_doc <- apply(topic_proportions, 1, which.max)
+
+# Calculating raw frequencies for each topic
+raw_frequencies <- table(dominant_topic_per_doc)
+
+# Ensuring all topics are represented, even if their frequency is 0
+raw_frequencies_all_topics <- as.integer(sapply(1:32, function(x) ifelse(x %in% names(raw_frequencies), raw_frequencies[as.character(x)], 0)))
+
+# Naming the vector for clarity
+names(raw_frequencies_all_topics) <- paste0("Topic ", 1:32)
+
+# Output the raw frequencies
+raw_frequencies_all_topics
 ```
 
-## Word Clouds (Dem Likes)
+## Topic Probability for Mini set = 60%
 
-```{R}
+```{r}
+# Extracting topic proportions
+topic_proportions <- fit_stm_mini_set_32$theta
+
+# Identifying topics in each document with >= 60% prevalence
+high_prevalence_topics <- apply(topic_proportions, 1, function(x) x >= 0.6)
+
+# Counting documents where each topic has >= 60% prevalence
+high_prevalence_frequencies <- colSums(high_prevalence_topics)
+
+# Output the frequencies
+high_prevalence_frequencies
+
+```
+
+## Preprossesing for full set
+
+```{r}
+#Generate Dem Likes Sample of 200
+anes_data_full_B <- read_excel("anes_2020_4 (1).xlsx", sheet = 2)
+
+
+# Sample 200 responses 
+Full_16677 <- anes_data_full_B
+
+# Load necessary libraries
+library(dplyr)
+library(tm)
 library(stm)
-library(ggplot2)
+library(tidytext)
+library(quanteda)
+library(tidyr)
 
-# Generate word clouds for each topic individually
-for(topic in 1:35) {
-  cloud(fit_stm, topic = topic)
-  title(paste("Word Cloud for Topic", topic))
-}
+# Assuming the data frame is named Full_800 and is already loaded into R
+# and it has the columns Dem_Likes, Dem_Dislikes, Rep_Likes, Rep_Dislikes
+
+# Combine the text columns into a single text vector
+# Uniting all text responses into one column for each row
+Full_16677_combined <- Full_16677
+
+# corpus object with the text data
+corp_quanteda <- corpus(Full_16677_combined$Responses)
+
+# Tokenization and preprocessing
+preprocessed_text_data_b <- tokens(corp_quanteda, 
+                                 remove_numbers = TRUE, 
+                                 remove_punct = TRUE,
+                                 remove_symbols = TRUE) %>%
+  tokens_remove(stopwords("en")) %>%
+  tokens_wordstem(language = "english") %>%
+  tokens_tolower() %>%
+  tokens_ngrams(1)
+
+# Create the document-feature matrix (DFM)
+topic_dfm_b <- dfm(preprocessed_text_data_b) 
+
+# Convert the DFM to the stm format
+topic_dfm_stm_b <- quanteda::convert(topic_dfm_b, to = "stm")
+
+# Extract the covariates
+meta_data_b <- data.frame(
+  PartyId = as.factor(Full_16677$V201228), # Factor
+  Education = as.factor(Full_16677$V201510), # Factor
+  Ideology = as.numeric(Full_16677$V201201), # Numeric
+  GovTrust = as.numeric(Full_16677$V201233), # Numeric
+  Age = as.numeric(Full_16677$V201507x) # Numeric
+)
+
+# Check the number of documents
+n_documents <- length(topic_dfm_stm_b$documents)
+# Check the number of rows in metadata
+n_metadata <- nrow(meta_data_b)
+
+# Print out the counts to see the mismatch
+cat("Number of documents:", n_documents, "\n")
+cat("Number of metadata entries:", n_metadata, "\n")
+
+# Meta-data correction
+meta_data_b <- head(meta_data_b, -4)
 ```
 
-## Effects of Covariates (Dem Likes)
+## Finding K (FULL_SET)
+
+```{r eval=FALSE, include=FALSE}
+# narrowed results
+result_narrowed_b <- searchK(documents = topic_dfm_stm_b$documents, vocab = topic_dfm_stm_b$vocab, K = 30:40)
+
+
+# You can plot the results to assess the model fit across different numbers of topics
+plot(result_narrowed_b, type = "line", ylim = c(0, max(result$heldout)))
+
+# Plot the results
+plot(result_narrowed_b, metric = "heldout")
+plot(result_narrowed_b, metric = "semanticcoherence")
+plot(result_narrowed_b, metric = "residual")
+
+```
+
+## Full Set at 32
 
 ```{r}
-# Get the summary of the estimated effects
-summary_estEffoff 
+# STM Model
+fit_stm_32_b <- stm(documents =
+topic_dfm_stm_b$documents, vocab = topic_dfm_stm_b$vocab, K = 32, prevalence
+=~ PartyId + Education + Ideology + GovTrust, max.em.its = 1000000,
+data = meta_data_b, init.type = "Spectral", verbose = TRUE)
+
+# Label topics
+
+labelTopics(fit_stm_32_b)
+```
+
+## Full Set at 35
+
+```{r}
+# STM Model
+fit_stm_35_b <- stm(documents =
+topic_dfm_stm_b$documents, vocab = topic_dfm_stm_b$vocab, K = 35,prevalence
+=~ PartyId + Education + Ideology + GovTrust, max.em.its = 1000000,
+data = meta_data_b, init.type = "Spectral", verbose = TRUE)
+
+# Label topics
+
+labelTopics(fit_stm_35_b)
+```
+
+## Full Set at 38
+
+```{r}
+# STM Model
+fit_stm_38_b <- stm(documents =
+topic_dfm_stm_b$documents, vocab = topic_dfm_stm_b$vocab, K = 38,prevalence
+=~ PartyId + Education + Ideology + GovTrust, max.em.its = 1000000,
+data = meta_data_b, init.type = "Spectral", verbose = TRUE)
+
+# Label topics
+
+labelTopics(fit_stm_38_b)
+```
+
+## Topic Probability for FULL_SET via Theta - Presence across all documents - 32
+
+```{r}
+# Extracting topic proportions
+full_topic_proportions <- fit_stm_32_b$theta
+
+# Each document contributes to the topic it is most associated with
+full_dominant_topic_per_doc <- apply(full_topic_proportions, 1, which.max)
+
+# Calculating raw frequencies for each topic
+full_raw_frequencies <- table(full_dominant_topic_per_doc)
+
+# Ensuring all topics are represented, even if their frequency is 0
+full_raw_frequencies_all_topics <- as.integer(sapply(1:32, function(x) ifelse(x %in% names(full_raw_frequencies), full_raw_frequencies[as.character(x)], 0)))
+
+# Naming the vector for clarity
+names(full_raw_frequencies_all_topics) <- paste0("Topic ", 1:32)
+
+# Output the raw frequencies
+full_raw_frequencies_all_topics
+```
+
+## Topic Probability for FULL_SET via Theta - Presence across all documents - 35
+
+```{r}
+# Extracting topic proportions
+full_topic_proportions <- fit_stm_35_b$theta
+
+# Each document contributes to the topic it is most associated with
+full_dominant_topic_per_doc <- apply(full_topic_proportions, 1, which.max)
+
+# Calculating raw frequencies for each topic
+full_raw_frequencies <- table(full_dominant_topic_per_doc)
+
+# Ensuring all topics are represented, even if their frequency is 0
+full_raw_frequencies_all_topics <- as.integer(sapply(1:35, function(x) ifelse(x %in% names(full_raw_frequencies), full_raw_frequencies[as.character(x)], 0)))
+
+# Naming the vector for clarity
+names(full_raw_frequencies_all_topics) <- paste0("Topic ", 1:35)
+
+# Output the raw frequencies
+full_raw_frequencies_all_topics
+```
+
+## Topic Probability for FULL_SET_32 = 15%
+
+```{r}
+# Extracting topic proportions
+full_topic_proportions <- fit_stm_32_b$theta
+
+# Identifying topics in each document with >= 60% prevalence
+full_high_prevalence_topics <- apply(full_topic_proportions, 1, function(x) x >= 0.15)
+
+# Counting documents where each topic has >= 60% prevalence
+full_high_prevalence_frequencies <- colSums(full_high_prevalence_topics)
+
+# Output the frequencies
+full_high_prevalence_frequencies
+
+```
+
+## Full set 35 at 15%
+
+```{r}
+# Extracting topic proportions
+full_topic_proportions <- fit_stm_35_b$theta
+
+# Identifying topics in each document with >= 60% prevalence
+full_high_prevalence_topics <- apply(full_topic_proportions, 1, function(x) x >= 0.15)
+
+# Counting documents where each topic has >= 60% prevalence
+full_high_prevalence_frequencies <- colSums(full_high_prevalence_topics)
+
+# Output the frequencies
+full_high_prevalence_frequencies
+
 ```
