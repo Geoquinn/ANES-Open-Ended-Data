@@ -23,6 +23,8 @@ The classification is produced by a human-in-the-loop, API-based workflow that a
 | 2016 | In development | — |
 | 2012 | In development | — |
 
+All covered years fall within the period for which ANES open-end response texts are **publicly downloadable in redacted form** (2008 onward). See [License and Terms of Use](#license-and-terms-of-use) below.
+
 ## Repository structure
 
 ```
@@ -72,16 +74,43 @@ Recommended practice:
 - Report the validation statistics above alongside any results derived from these codes.
 - Where feasible, hand-code a small sample from your own subset of interest as a local check.
 
-## Data source and terms of use
+## License and Terms of Use
 
-The underlying open-ended responses are the property of the **American National Election Studies** and are subject to ANES terms of use. Users of this repository must independently obtain the source data from the ANES and comply with those terms, including:
+### The underlying survey data
 
-- Use solely for research or statistical purposes, and not for investigation of specific respondents.
-- No use of the identity of any respondent discovered intentionally or inadvertently; report any such discovery to `anes@electionstudies.org`.
-- Cite ANES data and documentation in any work using them.
+The open-ended responses classified here originate with the **American National Election Studies**, administered through a collaboration between the University of Michigan and Stanford University with funding from the National Science Foundation. ANES data are not the intellectual property of this project.
 
-The original collectors of the data, the ANES, and its funding agencies bear no responsibility for the analyses or interpretations presented here. Please see the <a href="https://electionstudies.org/data-center/">ANES</a> data page for the original open ended text files and corresponding study. 
+ANES treats its public release datasets as public goods and asks that derived work link back to the original dataset. Users of this repository are expected to obtain the source data from ANES directly and to observe the ANES conditions of use, which require that you:
 
+- Use the datasets solely for research or statistical purposes, and **not** to investigate specific survey respondents.
+- Make no use of the identity of any respondent discovered intentionally or inadvertently, and report any such discovery to `anes@electionstudies.org`.
+- Cite ANES data and documentation in any work that uses them, and send citations of resulting publications to ANES for its bibliography.
+- Acknowledge that ANES and its funding agencies bear no responsibility for any use of the data or for interpretations or inferences drawn from it.
+
+Source data: <https://electionstudies.org/data-center/>
+
+### Public vs. restricted open-end texts — important
+
+ANES draws a hard line here, and it determines what this repository can contain:
+
+| Study years | Open-end text status | Redistribution of derivatives |
+|---|---|---|
+| **2008 and later** | Publicly downloadable in redacted form via the ANES study pages | Permitted, with attribution and a link back to the source study |
+| **1996–2004** | **Restricted-Use Data**, available by application through ICPSR's Virtual Data Enclave | **Prohibited** |
+| **1984–1992** | Restricted-Use; released unredacted with randomized replacement case IDs | **Prohibited** |
+| **Pre-1984** | Transcribed from archived paper questionnaires; availability by inquiry, subject to restricted-use limits | **Prohibited** |
+
+> ⚠️ **ANES restricted-use datasets — and derivatives of them, explicitly including replication datasets — may not be disseminated further.** This is a respondent-confidentiality requirement, not a formality.
+>
+> In practice: codes derived from **2012–2024** responses can be released here. Codes derived from pre-2008 responses **cannot**, even though those years are central to the associated research. Work extending the classification backward through the historical series stays inside the enclave, with only aggregate results appearing in publications. Keep the two clearly separated in this repository, and confirm that nothing under `data/` was produced from restricted-use inputs before each release.
+
+Restricted-use access details: <https://electionstudies.org/data-center/restricted-data-access/>
+
+### This repository's own contributions
+
+The **codebook adaptation, classification codes, validation results, scripts, and documentation** created by this project are released under *[choose one — e.g. CC BY 4.0 for data and documentation, MIT for code]*.
+
+This license applies **only** to the derived materials produced here. It does not and cannot extend to the underlying ANES survey data, which remain governed by the ANES conditions above. Redistributing this repository grants no rights to the source data.
 
 ## Citation
 
@@ -89,15 +118,13 @@ If you use this database, please cite:
 
 > Quinn, George D. 2026. *American National Election Study — Open-Ended Response Database: Candidate Likes and Dislikes.* Department of Political Science, Rutgers University.
 
+And cite the underlying ANES study or studies you used, per ANES policy.
+
 The methodology is described in:
 
 > Quinn, George D., and Richard R. Lau. "Steering AI for Classifying Open-Ended Text: An Evaluation of ANES 2020 Candidate Likes and Dislikes." *Under review.*
 
 *[Update with final publication details once available.]*
-
-## License
-
-*[Specify — e.g. CC BY 4.0 for the derived codes and documentation, noting that the underlying ANES data carry their own terms.]*
 
 ## Contact
 
