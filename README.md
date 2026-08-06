@@ -110,8 +110,6 @@ The methodology is described in:
 
 > Quinn, George D., and Richard R. Lau. "Steering AI for Classifying Open-Ended Text: An Evaluation of ANES 2020 Candidate Likes and Dislikes." *Under review.*
 
-*[Update with final publication details once available.]*
-
 ## Contact
 
 George D. Quinn — `George.Quinn@rutgers.edu` — [geoquinn.github.io](https://geoquinn.github.io)
