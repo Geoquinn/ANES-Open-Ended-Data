@@ -80,7 +80,7 @@ The underlying open-ended responses are the property of the **American National 
 - No use of the identity of any respondent discovered intentionally or inadvertently; report any such discovery to `anes@electionstudies.org`.
 - Cite ANES data and documentation in any work using them.
 
-The original collectors of the data, the ANES, and its funding agencies bear no responsibility for the analyses or interpretations presented here. <a href="https://electionstudies.org/data-center/">Visit W3Schools.com!</a>
+The original collectors of the data, the ANES, and its funding agencies bear no responsibility for the analyses or interpretations presented here. Please see the <a href="https://electionstudies.org/data-center/">ANES</a> data page for the original open ended text files and corresponding study. 
 
 
 ## Citation
